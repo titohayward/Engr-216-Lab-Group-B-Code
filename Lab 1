@@ -1,0 +1,61 @@
+
+### Using Pandas and Numpy, I have saved the attributes as variables to do calculations on later ###
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# import the csv into pandas for easy access of information
+df = pd.read_csv("example_4.csv")
+
+# dot positions
+orange_x_pos = np.array(df["position_px_x-darkorange"][3:])
+orange_y_pos = np.array(df["position_px_y-darkorange"][3:])
+
+green_x_pos = np.array(df["position_px_x-green"][3:])
+green_y_pos = np.array(df["position_px_y-green"][3:])
+
+yellow_x_pos = np.array(df["position_px_x-yellowneon"][3:])
+yellow_y_pos = np.array(df["position_px_y-yellowneon"][3:])
+
+# Dot sizes
+orange_sizepx = np.array(df["size_px-darkorange"][3:])
+green_sizepx = np.array(df["size_px-green"][3:])
+yellow_sizepx = np.array(df["size_px-yellowneon"][3:])
+
+# half of ave of dot size is measurement error 
+error_orange_size = (0.5) * np.average(orange_sizepx)
+error_green_size = (0.5) * np.average(green_sizepx)
+error_yellow_size = (0.5) * np.average(yellow_sizepx)
+error_dots = np.array([error_green_size,error_orange_size,error_yellow_size])
+error_dots_ave = np.average(error_dots)
+
+#Frames taken for reference
+frame = np.array(df["frame_no"][3:])
+
+# Length = the distance between the green and yellow dot
+# Width = the distance between the green and orange dot
+length_dist = np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_pos)**2)
+width_dist = np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2)
+dist_array = np.array([length_dist,width_dist])
+
+# find the ave length and width
+ave_len = np.average(length_dist)
+ave_wid = np.average(width_dist)
+
+
+# the difference between the length and the height on average
+ave_diff = np.average(abs(length_dist - width_dist))
+
+
+#  Here is the ave area from the data compiled
+area_ave = ave_len*ave_wid
+
+#  compare to the squared value of the width or the squared value of the length
+area_two_wid = ave_wid**2
+area_two_len = ave_len**2
+
+print("\n","The ave area is:", area_ave, "\n",
+      "The length squared is: ", area_two_len, "\n", "The Width squared is:",area_two_wid, "")
+print("total diff: \n Diff between ave and sqrd len", area_ave - area_two_len,
+      "\n Diff between ave and sqrd len", area_ave - area_two_wid)
