@@ -59,3 +59,5 @@ print("\n","The ave area is:", area_ave, "\n",
       "The length squared is: ", area_two_len, "\n", "The Width squared is:",area_two_wid, "")
 print("total diff: \n Diff between ave and sqrd len", area_ave - area_two_len,
       "\n Diff between ave and sqrd len", area_ave - area_two_wid)
+
+print("testing github")
