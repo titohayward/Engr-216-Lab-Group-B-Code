@@ -39,6 +39,11 @@ length_dist = np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_po
 width_dist = np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2)
 dist_array = np.array([length_dist,width_dist])
 
+plt.hist(length_dist, edgecolor = "black", color = 'green')
+plt.hist(width_dist, edgecolor = "black", color = 'blue')
+plt.title("Length and Width")
+plt.show()
+
 # find the ave length and width
 ave_len = np.average(length_dist)
 ave_wid = np.average(width_dist)
@@ -60,4 +65,3 @@ print("\n","The ave area is:", area_ave, "\n",
 print("total diff: \n Diff between ave and sqrd len", area_ave - area_two_len,
       "\n Diff between ave and sqrd len", area_ave - area_two_wid)
 
-print("testing github")
