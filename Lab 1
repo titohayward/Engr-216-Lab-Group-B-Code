@@ -1,5 +1,6 @@
-
-### Using Pandas and Numpy, I have saved the attributes as variables to do calculations on later ###
+# Juan Hayward
+# Engr Lab 1: Error Propogation
+# Data code
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -52,8 +53,6 @@ yellow_y_pos = np.array(df["position_px_y-yellowneon"][3:])
 rd_length = np.round(np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_pos)**2))
 rd_width = np.round(np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2))
 dist_array = np.array([np.average(rd_length),np.average(rd_width)])
-
-
 
 # error in length calc:
 # 3 phases:
