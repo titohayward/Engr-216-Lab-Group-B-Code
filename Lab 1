@@ -8,6 +8,35 @@ import numpy as np
 # import the csv into pandas for easy access of information
 df = pd.read_csv("example_4.csv")
 
+def error_add(*errors):
+      """ 
+      This function computes error for adding and subtracting values.
+      For this lab the assumed error value is 3 px. 
+
+      """
+      error = np.array([errors])
+      return np.average(np.sqrt(np.sum((error)**2)))
+
+def error_mult(error, value, val_1):
+      """
+      This function takes in:
+      1. an array of errors
+      2. an array of values
+      3. a known value for the calculation answer that we are finding the uncertainty of.
+
+      """
+      return np.average(val_1 * np.sqrt(np.sum((error/value)**2)))
+
+def error_mult_mod(error, value, val_1):
+      """
+      This function takes in:
+      1. an array of errors
+      2. an array of values
+      3. a known value for the calculation answer that we are finding the uncertainty of.
+
+      """
+      return np.average(val_1 * np.sqrt(np.sum(2*(error/value)**2)))
+
 # dot positions
 orange_x_pos = np.array(df["position_px_x-darkorange"][3:])
 orange_y_pos = np.array(df["position_px_y-darkorange"][3:])
@@ -18,50 +47,63 @@ green_y_pos = np.array(df["position_px_y-green"][3:])
 yellow_x_pos = np.array(df["position_px_x-yellowneon"][3:])
 yellow_y_pos = np.array(df["position_px_y-yellowneon"][3:])
 
-# Dot sizes
-orange_sizepx = np.array(df["size_px-darkorange"][3:])
-green_sizepx = np.array(df["size_px-green"][3:])
-yellow_sizepx = np.array(df["size_px-yellowneon"][3:])
-
-# half of ave of dot size is measurement error 
-error_orange_size = (0.5) * np.average(orange_sizepx)
-error_green_size = (0.5) * np.average(green_sizepx)
-error_yellow_size = (0.5) * np.average(yellow_sizepx)
-error_dots = np.array([error_green_size,error_orange_size,error_yellow_size])
-error_dots_ave = np.average(error_dots)
-
-#Frames taken for reference
-frame = np.array(df["frame_no"][3:])
-
 # Length = the distance between the green and yellow dot
 # Width = the distance between the green and orange dot
-length_dist = np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_pos)**2)
-width_dist = np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2)
-dist_array = np.array([length_dist,width_dist])
+rd_length = np.round(np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_pos)**2))
+rd_width = np.round(np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2))
+dist_array = np.array([np.average(rd_length),np.average(rd_width)])
 
-plt.hist(length_dist, edgecolor = "black", color = 'green')
-plt.hist(width_dist, edgecolor = "black", color = 'blue')
-plt.title("Length and Width")
-plt.show()
+
+
+# error in length calc:
+# 3 phases:
+error_dx = error_add(0.3)
+error_dy = error_add(0.3)
+error = np.array([error_dx,error_dy])
+
+# error in length
+dx_length = np.average(green_x_pos - yellow_x_pos)
+dy_length = np.average(green_y_pos - yellow_y_pos)
+dlen_array = np.array([np.average(dx_length),np.average(dx_length)])
+error_len = error_mult_mod(error,dlen_array,rd_length)
+
+# error in width
+dx_width = np.average(green_x_pos - orange_x_pos)
+dy_width = np.average(green_y_pos - orange_y_pos)
+dwide_array = np.array([np.average(dx_width),np.average(dx_width)])
+error_wid = error_mult_mod(error,dwide_array,rd_width)
+
 
 # find the ave length and width
-ave_len = np.average(length_dist)
-ave_wid = np.average(width_dist)
+ave_len = np.average(rd_length)
+ave_wid = np.average(rd_width)
+
+# average area
+ave_area = ave_len*ave_wid
+ave_array = np.array([ave_len,ave_wid])
+err_ave_array = np.array([error_len,error_wid])
+error_ave_area = error_mult(err_ave_array,ave_array,ave_area)
 
 
-# the difference between the length and the height on average
-ave_diff = np.average(abs(length_dist - width_dist))
+# plot the hist for length and width
+bins = np.arange(158,171)
+plt.title("Length and Width")
 
+# plot 1 
+plt.subplot(211)
+plt.hist(rd_length, bins = bins, edgecolor = "black", color = 'green', label = "Length" )
+plt.axvline(ave_len, color = 'red', label = "Ave Length")
+plt.legend()
 
-#  Here is the ave area from the data compiled
-area_ave = ave_len*ave_wid
+# plot 2
+plt.subplot(212)
+plt.hist(rd_width, bins = bins, edgecolor = "black", color = 'blue', label = 'Width')
+plt.axvline(ave_wid, color = 'red', label = "Ave Width")
+plt.legend()
+plt.show()
 
-#  compare to the squared value of the width or the squared value of the length
-area_two_wid = ave_wid**2
-area_two_len = ave_len**2
-
-print("\n","The ave area is:", area_ave, "\n",
-      "The length squared is: ", area_two_len, "\n", "The Width squared is:",area_two_wid, "")
-print("total diff: \n Diff between ave and sqrd len", area_ave - area_two_len,
-      "\n Diff between ave and sqrd len", area_ave - area_two_wid)
-
+# print the results
+print("The average length  is %f \n its uncertainty is %f." %(round(ave_len, 3), round(error_len, 3)))
+print("The average width is %f \n its uncertainty is %f." %(round(ave_wid, 3), round(error_wid, 3)))
+print()
+print("The average area is %f \n its uncertainty is %f." %(round(ave_area, 3), round(error_ave_area, 3)))
