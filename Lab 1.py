@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 # import the csv into pandas for easy access of information
 df = pd.read_csv("example_4.csv")
 
