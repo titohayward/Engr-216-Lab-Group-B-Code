@@ -1,4 +1,5 @@
 # Juan Hayward
+# Karin testing first change proposal - this comment is the change proposal :) 9/6/2020 11:30am
 # Engr Lab 1: Error Propogation
 # Data code
 
