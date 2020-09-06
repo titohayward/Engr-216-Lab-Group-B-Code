@@ -20,7 +20,6 @@ def fin_diff(value_array,change_array):
         vel = (( value_array[i+1] -  value_array[i]) / (change_array[i+1] - change_array[i]))
         der_list.append(vel)
     derivative = np.array([der_list])
-    print("\n", " 'fin_diff' Output:\n",derivative[:6].reshape(5,1), "\n ... \n")
     return derivative
 
 print(fin_diff(pos,time))

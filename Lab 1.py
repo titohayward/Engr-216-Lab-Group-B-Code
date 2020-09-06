@@ -39,6 +39,10 @@ def error_mult_mod(error, value, val_1):
       """
       return np.average(val_1 * np.sqrt(np.sum(2*(error/value)**2)))
 
+def error_array(error_array, value_array, val_1):
+      return val_1 * np.sqrt(sum((error_array/value_array)**2))
+      
+
 # dot positions
 orange_x_pos = np.array(df["position_px_x-darkorange"][3:])
 orange_y_pos = np.array(df["position_px_y-darkorange"][3:])
@@ -78,12 +82,6 @@ error_wid = error_mult_mod(error,dwide_array,rd_width)
 ave_len = np.average(rd_length)
 ave_wid = np.average(rd_width)
 
-# average area
-ave_area = ave_len*ave_wid
-ave_array = np.array([ave_len,ave_wid])
-err_ave_array = np.array([error_len,error_wid])
-error_ave_area = error_mult(err_ave_array,ave_array,ave_area)
-
 
 # plot the hist for length and width
 bins = np.arange(158,171)
@@ -106,4 +104,44 @@ plt.show()
 print("The average length  is %f \n its uncertainty is %f." %(round(ave_len, 3), round(error_len, 3)))
 print("The average width is %f \n its uncertainty is %f." %(round(ave_wid, 3), round(error_wid, 3)))
 print()
-print("The average area is %f \n its uncertainty is %f." %(round(ave_area, 3), round(error_ave_area, 3)))
+
+# Find the area using 2 methods
+# Method 1: ave_length * ave_width  = average area
+def method_1():
+      ave_area = ave_len*ave_wid
+      ave_array = np.array([ave_len,ave_wid])
+      err_ave_array = np.array([error_len,error_wid])
+      error_ave_area = error_mult(err_ave_array,ave_array,ave_area)
+      print("The average area using method #1 is %f \n its uncertainty is %f." %(round(ave_area, 3), round(error_ave_area, 3)))
+
+
+# Method 2: area from each reading, average the values
+def method_2():
+
+      length = np.sqrt((green_x_pos - yellow_x_pos)**2+(green_y_pos - yellow_y_pos)**2)
+      width = np.sqrt((green_x_pos - orange_x_pos)**2+(green_y_pos - orange_y_pos)**2)
+      gen_area = length * width
+      ave_gen_area = np.average([gen_area])
+      
+
+      # Error Calculations:
+      # error in length
+      dx_length = green_x_pos - yellow_x_pos
+      dy_length = green_y_pos - yellow_y_pos
+      dlen_array = np.array([np.average(dx_length),np.average(dx_length)])
+      error_len = error_mult_mod(error,dlen_array,rd_length)
+
+      # error in width
+      dx_width = np.average(green_x_pos - orange_x_pos)
+      dy_width = np.average(green_y_pos - orange_y_pos)
+      dwide_array = np.array([np.average(dx_width),np.average(dx_width)])
+      error_wid = error_mult_mod(error,dwide_array,rd_width)
+
+      # Error in area:
+      error_length = error_array(length)
+      error_width = error_array()
+      error_gen_area = error_mult(length)
+      print("The average area using method #2 is %f \n its uncertainty is %f." round(ave_gen_area, 3), round(error_gen_area, 3)))
+
+
+
