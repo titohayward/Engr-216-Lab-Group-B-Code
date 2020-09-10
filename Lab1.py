@@ -64,13 +64,63 @@ error_width = np.abs(width) * 0.5 * (err_yxsum_wid /(yxsum_wid))
 
 # plot 1 
 plt.subplot(211)
+plt.xlabel("Length")
+plt.title("Average Length and Width is in red.")
 plt.hist(length, edgecolor = "black", color = 'green', label = "Length" )
-plt.axvline(ave_len, color = 'red', label = "Ave Length")
+plt.axvline(ave_len, color = 'red', label = round(ave_len,2))
 plt.legend()
 
 # plot 2
 plt.subplot(212)
 plt.hist(width, edgecolor = "black", color = 'blue', label = 'Width')
-plt.axvline(ave_wid, color = 'red', label = "Ave Width")
+plt.axvline(ave_wid, color = 'red', label = round(ave_wid,2))
 plt.legend()
 plt.show()
+
+# Calculate area using 2 methods:
+# 1. Find area from ave length and ave widths
+# 2. Find area from individual lengths and widths
+
+# Method 1
+
+#1. lsum and wsum
+lsum = np.sum(length)
+wsum = np.sum(width)
+#       ### Error: ###
+err_lsum = np.sqrt(np.sum(error_length)**2)
+err_wsum = np.sqrt(np.sum(error_width)**2)
+
+#2. l_ave and w_ave
+l_ave = np.average(lsum)
+w_ave = np.average(wsum)
+#       ### Error: ###
+err_l_ave = np.sqrt((err_lsum/lsum)**2)
+err_w_ave = np.sqrt((err_wsum/wsum)**2)
+
+#3. Area_ave
+area_meth1 = l_ave * w_ave
+#       ### Error: ###
+err_area_meth1 = np.sqrt((err_l_ave/l_ave)**2 + (err_w_ave/w_ave)**2)
+
+# Method 2:
+
+# 1.  A_ind
+a_ind = length * width 
+#       ### Error: ###
+err_a_ind = np.sqrt((error_length)**2 + (error_width)**2)
+
+#2. Asum_ind 
+asum_ind = np.sum(a_ind)
+#       ### Error: ###
+err_asum_ind = np.sqrt(np.sum(err_a_ind)**2)
+
+#3. area_meth2
+area_meth2 = np.average(asum_ind)
+err_area_meth2 = np.sqrt((err_asum_ind/asum_ind)**2)
+# result
+print("Method 1: Area ", round(area_meth1, 2),"its uncertainty", round(err_area_meth1, 2))
+print("Method 2: Area ", round(area_meth2, 2),"its uncertainty", round(err_area_meth2, 2))
+
+
+
+
