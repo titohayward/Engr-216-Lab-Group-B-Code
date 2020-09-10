@@ -1,5 +1,4 @@
 # Juan Hayward
-# Karin testing first change proposal - this comment is the change proposal :) 9/6/2020 11:30am
 # Engr Lab 1: Error Propogation
 # Data code
 
@@ -20,7 +19,7 @@ def error_add(*errors):
       error = np.array([errors])
       return np.average(np.sqrt(np.sum((error)**2)))
 
-def error_mult(error, value, val_1):
+def error_mult(error_x, x, q):
       """
       This function takes in:
       1. an array of errors
@@ -28,9 +27,9 @@ def error_mult(error, value, val_1):
       3. a known value for the calculation answer that we are finding the uncertainty of.
 
       """
-      return np.average(val_1 * np.sqrt(np.sum((error/value)**2)))
+      return np.average(q * np.sqrt(np.sum((error_x/x)**2)))
 
-def error_mult_mod(error, value, val_1):
+def error_mult_mod(error_x, value_x, q):
       """
       This function takes in:
       1. an array of errors
@@ -38,10 +37,20 @@ def error_mult_mod(error, value, val_1):
       3. a known value for the calculation answer that we are finding the uncertainty of.
 
       """
-      return np.average(val_1 * np.sqrt(np.sum(2*(error/value)**2)))
+      return np.average(q * np.sqrt(np.sum(2*(error_x/value_x)**2)))
 
 def error_array(error_array, value_array, val_1):
       return val_1 * np.sqrt(sum((error_array/value_array)**2))
+
+def error_exp(error_x, n, q, x):
+      """
+      1st arg =  error in x
+      2nd arg = exponent
+      3rd arg = q
+      4th arg = x
+      """
+      return np.average(abs(q)*abs(n)*(error_x/abs(x)))
+
       
 
 # dot positions
@@ -142,7 +151,4 @@ def method_2():
       error_length = error_array(length)
       error_width = error_array()
       error_gen_area = error_mult(length)
-      print("The average area using method #2 is %f \n its uncertainty is %f." round(ave_gen_area, 3), round(error_gen_area, 3)))
-
-
-
+      print("The average area using method #2 is %f \n its uncertainty is %f." % (round(ave_gen_area, 3), round(error_gen_area, 3)))
