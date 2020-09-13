@@ -62,17 +62,19 @@ error_width = np.abs(width) * 0.5 * (err_yxsum_wid /(yxsum_wid))
 
 # histogram of width and length
 
+l_bins = np.arange(160,171)
+w_bins = np.arange(158,169)
+
 # plot 1 
 plt.subplot(211)
-plt.xlabel("Length")
-plt.title("Average Length and Width is in red.")
-plt.hist(length, edgecolor = "black", color = 'green', label = "Length" )
+plt.title("Ave Length and Ave Width is in Red.")
+plt.hist(length, bins = l_bins, edgecolor = "black", color = 'green', label = "Length" )
 plt.axvline(ave_len, color = 'red', label = round(ave_len,2))
 plt.legend()
 
 # plot 2
 plt.subplot(212)
-plt.hist(width, edgecolor = "black", color = 'blue', label = 'Width')
+plt.hist(width, bins = w_bins, edgecolor = "black", color = 'blue', label = 'Width')
 plt.axvline(ave_wid, color = 'red', label = round(ave_wid,2))
 plt.legend()
 plt.show()
@@ -118,8 +120,10 @@ err_asum_ind = np.sqrt(np.sum(err_a_ind)**2)
 area_meth2 = np.average(asum_ind)
 err_area_meth2 = np.sqrt((err_asum_ind/asum_ind)**2)
 # result
-print("Method 1: Area ", round(area_meth1, 2),"its uncertainty", round(err_area_meth1, 2))
-print("Method 2: Area ", round(area_meth2, 2),"its uncertainty", round(err_area_meth2, 2))
+print(ave_len, np.average(error_length))
+print(ave_wid,np.average(error_width))
+print("Method 1: Area ", round(area_meth1, 2),"its uncertainty", round(err_area_meth1,3))
+print("Method 2: Area ", round(area_meth2, 2),"its uncertainty", np.std(a_ind))
 
 
 
