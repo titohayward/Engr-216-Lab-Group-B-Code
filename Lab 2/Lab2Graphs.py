@@ -1,4 +1,3 @@
-from DataAnalysis import trial1, trial2, trial3
 import matplotlib.pyplot as plt
 import numpy as np
 import math as mt
@@ -51,10 +50,3 @@ class graph:
         plt.legend()
         plt.show()
      
-t1 = graph(trial1, "Puck #1")
-t2 = graph(trial2, "Puck #2")
-t3 = graph(trial3, "Puck #3")
-
-t1.hist()
-t2.hist()
-t3.hist()

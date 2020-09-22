@@ -23,7 +23,6 @@ def convert(pixels):
     error = np.nanstd(length)
     return meters, error
 
-
 # Create class that will:
 #   import data to arrays and calculate values.
 #   convert from milliseconds to seconds.
@@ -51,7 +50,7 @@ class object_puck:
         "yacc": self.yacc.flatten(),
         "time": self.time.flatten()
         })
-    
+
 trial1 = object_puck(puck1_df, 85)
 trial2 = object_puck(puck2_df, 10)
 trial3 = object_puck(puck3_df, 10)
@@ -65,4 +64,5 @@ def createExcel():
         trial1.data_df.to_excel(writer,sheet_name = "Trial 1")
         trial2.data_df.to_excel(writer,sheet_name = "Trial 2")
         trial3.data_df.to_excel(writer,sheet_name = "Trial 3")
+
 
