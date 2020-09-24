@@ -37,6 +37,7 @@ class object_puck_acc:
         self.time_ms = np.array([dataframe["time"][start:]])
         self.time = self.time_ms / 1000
 
+        # cut function: 
         array_cut = np.where(self.gy >= cut )
         self.gx =  np.delete(self.gx, array_cut)
         self.gy =  np.delete(self.gy, array_cut)
@@ -123,8 +124,6 @@ t1 = graph(trial1, "Puck #1")
 t2 = graph(trial2, "Puck #2")
 t3 = graph(trial3, "Puck #3")
 
-# t1.motiongraphs()
+t1.motiongraphs()
 # t2.motiongraphs()
 # t3.motiongraphs()
-
-createExcel()
