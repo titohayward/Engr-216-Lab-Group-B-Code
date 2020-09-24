@@ -24,15 +24,15 @@ def convert(pixels):
     meters = (1/1000)*(300/length_ave)*pixels 
     return meters
 
-def motion_plot(df1, start = 1):
+def motion_plot(df1, start = 1, end = 1):
     # Data
-    gx = np.array([df1["gx"][start:]])
+    gx = np.array([df1["gx"][start:end]])
     gx= convert(gx)
-    gx = np.negative(gx.flatten())
-    gy = np.array([df1["gy"][start:]])
+    gx = gx.flatten()
+    gy = np.array([df1["gy"][start:end]])
     gy = convert(gy)
-    gy = np.negative(gy.flatten())
-    time_ms = np.array([df1["time"][start:]])
+    gy = gy.flatten()
+    time_ms = np.array([df1["time"][start:end]])
     time = time_ms / 1000
     time = time.flatten()
     vx = np.gradient(gx.flatten(),time.flatten())
@@ -91,14 +91,43 @@ def motion_plot(df1, start = 1):
 
     return 
 
+def data_frame(df1, start =1, end = 1):
+    # Data
+    gx = np.array([df1["gx"][start:end]])
+    gx= convert(gx)
+    gx = gx.flatten()
+    gy = np.array([df1["gy"][start:end]])
+    gy = convert(gy)
+    gy = gy.flatten()
+    time_ms = np.array([df1["time"][start:end]])
+    time = time_ms / 1000
+    time = time.flatten()
+    vx = np.gradient(gx.flatten(),time.flatten())
+    vy = np.gradient(gy.flatten(),time.flatten())
+    ax = np.gradient(vx.flatten(),time.flatten())
+    ay = np.gradient(vy.flatten(),time.flatten())
+
+    dataFrame = pd.DataFrame({
+        "xpos": gx.flatten(),
+        "ypos": gy.flatten(),
+        "xvel": vx.flatten(),
+        "yvel": vy.flatten(),
+        "xacc": ax.flatten(),
+        "yacc": ay.flatten(),
+        "time": time.flatten()
+        })
+
+    return dataFrame
+
+
 def acc_aquire(df1, start = 1):
     # Data
     gx = np.array([df1["gx"][start:]])
     gx= convert(gx)
-    gx = np.negative(gx.flatten())
+    gx = gx.flatten()
     gy = np.array([df1["gy"][start:]])
     gy = convert(gy)
-    gy = np.negative(gy.flatten())
+    gy = gy.flatten()
     time_ms = np.array([df1["time"][start:]])
     time = time_ms / 1000
     time = time.flatten()
@@ -155,9 +184,9 @@ g = - 9.8 * mt.sin(
 # 2. 10
 # 3. 10
 
-motion_plot(puck1_df,85)
-motion_plot(puck2_df,10)
-motion_plot(puck3_df,10)
+motion_plot(puck1_df,110,184)
 
-acc_analysis("X Acceleration", p1ax, p2ax, p3ax, 10000, 6, 0)
-acc_analysis("Y Acceleration", p1ay, p2ay, p3ay, 10000, 6, g )
+trial1 = data_frame(puck1_df,110,184)
+trial1.to_excel("AccMethod.xlsx" )
+
+
